@@ -17,6 +17,7 @@ import Modal from '@mui/material/Modal';
 
 import CriarTarefa from './CriarTarefa';
 import EditarTarefa from './EditarTarefa';
+import Login from "../Login/index";
 
 //A função abaixo é usada para criar o array contendo os dados iniciais da listagem de tarefas.
 function createData(
@@ -43,13 +44,22 @@ const initialRows = [
 
 //Componente ListarTarefa
 const ListarTarefa = () => {
+  const [openLogin, setOpenLogin] = useState(true);
   const [open, setOpen] = useState(false);
   const [openEditar, setOpenEditar] = useState(false);
   const [tarefas, setTarefas] = useState([]);
   const [tarefa, setTarefa] = useState();
   const [idTarefaSelecionada, setIdTarefaSelecionada] = useState([]);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleCloseFinal = () => setOpen(false) & setOpenLogin(false);
+  const handleOpenLogin = () => setOpenLogin(true);
+  const handleClose = (event, reason) => {
+    if (event && reason === "backdropClick") 
+      return;
+
+      handleCloseFinal()
+    };
+
   const handleOpenEditar = () => setOpenEditar(true);
   const handleCloseEditar = () => setOpenEditar(false);
 
@@ -83,7 +93,7 @@ const ListarTarefa = () => {
 
     return(
     <>
-    <Card>
+    <Card >
         <CardHeader
           title="Tarefas"
           subheader="Listagem de Tarefas"
@@ -122,7 +132,7 @@ const ListarTarefa = () => {
                       <TableCell align="right">{row.statusTarefa}</TableCell>
                       <TableCell align="right">{row.recursoTarefa}</TableCell>
                       <TableCell align="center">
-                        <Button variant="contained" color="success" onClick={() => handleEditar(row.idTarefa)}><EditIcon fontSize="small" /></Button>            
+                        <Button variant="contained" color="info" onClick={() => handleEditar(row.idTarefa)}><EditIcon fontSize="small" /></Button>            
                       </TableCell>
                       <TableCell align="center">
                         <Button variant="contained" color="error" onClick={() => handleDeletar(row.idTarefa)}><DeleteIcon fontSize="small" /></Button>            
@@ -136,8 +146,25 @@ const ListarTarefa = () => {
         <CardActions>
             <Button size="small" variant="contained" onClick={handleOpen}>Criar Tarefa</Button>
             <Button size="small" variant="outlined">Cancelar</Button>
+            <Button size="small" variant="contained" color="warning" onClick={handleOpenLogin}>Sair</Button>
       </CardActions> 
     </Card>
+    
+    <div>
+      <Modal style={{background: '#fff'}}
+        open={openLogin}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+        disableEscapeKeyDown={true}
+        disableBackdropClick={true}
+      >
+        <div>
+          <Login handleClose={handleClose} />
+        </div>
+      </Modal>  
+    </div>
+
     <div>
       <Modal
         open={open}

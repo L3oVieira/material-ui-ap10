@@ -1,12 +1,12 @@
 import Header from "./components/header";
 import ListarTarefa from "./pages/tarefa/ListarTarefa";
 
-function App() {
+function App({handleOpenLogin}) {
   return (
     <div className="App">
-      <Header />
+      <Header props={handleOpenLogin}/>
       <ListarTarefa />
-    </div>
+  </div>
   );
 }
 
